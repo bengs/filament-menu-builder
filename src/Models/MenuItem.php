@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Datlechin\FilamentMenuBuilder\Models;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Datlechin\FilamentMenuBuilder\Contracts\MenuPanelable;
 use Datlechin\FilamentMenuBuilder\Enums\LinkTarget;
 use Datlechin\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
@@ -22,12 +24,12 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string|null $type
  * @property string|null $target
  * @property int $order
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|MenuItem[] $children
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection|MenuItem[] $children
  * @property-read int|null $children_count
- * @property-read \Illuminate\Database\Eloquent\Model|MenuPanelable|null $linkable
- * @property-read \Datlechin\FilamentMenuBuilder\Models\Menu $menu
+ * @property-read Model|MenuPanelable|null $linkable
+ * @property-read Menu $menu
  * @property-read \Datlechin\FilamentMenuBuilder\Models\MenuItem|null $parent
  */
 class MenuItem extends Model

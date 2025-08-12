@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Datlechin\FilamentMenuBuilder\Livewire;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\CheckboxList;
 use Datlechin\FilamentMenuBuilder\Contracts\MenuPanel as ContractsMenuPanel;
 use Datlechin\FilamentMenuBuilder\Models\Menu;
 use Filament\Forms\Components;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Validate;
@@ -100,13 +101,13 @@ class MenuPanel extends Component implements HasForms
             ->send();
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
         $items = collect($this->getItems())->mapWithKeys(fn ($item) => [$item['linkable_id'] ?? $item['title'] => $item['title']]);
 
-        return $form
-            ->schema([
-                Components\View::make('filament-tables::components.empty-state.index')
+        return $schema
+            ->components([
+                \Filament\Schemas\Components\View::make('filament-tables::components.empty-state.index')
                     ->viewData([
                         'heading' => __('filament-menu-builder::menu-builder.panel.empty.heading'),
                         'description' => __('filament-menu-builder::menu-builder.panel.empty.description'),
@@ -114,7 +115,7 @@ class MenuPanel extends Component implements HasForms
                     ])
                     ->visible($items->isEmpty()),
 
-                Components\CheckboxList::make('data')
+                CheckboxList::make('data')
                     ->hiddenLabel()
                     ->required()
                     ->bulkToggleable()

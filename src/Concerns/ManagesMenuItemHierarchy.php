@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Datlechin\FilamentMenuBuilder\Concerns;
 
+use Filament\Support\Enums\Size;
 use Datlechin\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Datlechin\FilamentMenuBuilder\Services\MenuItemService;
 use Filament\Actions\Action;
-use Filament\Support\Enums\ActionSize;
 
 trait ManagesMenuItemHierarchy
 {
@@ -40,7 +40,7 @@ trait ManagesMenuItemHierarchy
             ->icon('heroicon-o-arrow-right')
             ->color('gray')
             ->iconButton()
-            ->size(ActionSize::Small)
+            ->size(Size::Small)
             ->action(fn (array $arguments) => $this->indent($arguments['id']))
             ->visible(fn (array $arguments): bool => $this->isIndentActionVisible($arguments['id']));
     }
@@ -52,7 +52,7 @@ trait ManagesMenuItemHierarchy
             ->icon('heroicon-o-arrow-left')
             ->color('gray')
             ->iconButton()
-            ->size(ActionSize::Small)
+            ->size(Size::Small)
             ->action(fn (array $arguments) => $this->unindent($arguments['id']))
             ->visible(fn (array $arguments): bool => $this->isUnindentActionVisible($arguments['id']));
     }

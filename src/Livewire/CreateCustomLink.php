@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Datlechin\FilamentMenuBuilder\Livewire;
 
+use Filament\Schemas\Schema;
 use Datlechin\FilamentMenuBuilder\Enums\LinkTarget;
 use Datlechin\FilamentMenuBuilder\Models\Menu;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
@@ -54,10 +54,10 @@ class CreateCustomLink extends Component implements HasForms
         $this->dispatch('menu:created');
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('title')
                     ->label(__('filament-menu-builder::menu-builder.form.title'))
                     ->required(),

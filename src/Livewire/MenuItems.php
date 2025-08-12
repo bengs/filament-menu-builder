@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Datlechin\FilamentMenuBuilder\Livewire;
 
+use Filament\Support\Enums\Size;
+use Filament\Support\Enums\Width;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Group;
 use Datlechin\FilamentMenuBuilder\Concerns\ManagesMenuItemHierarchy;
 use Datlechin\FilamentMenuBuilder\Enums\LinkTarget;
 use Datlechin\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
@@ -11,16 +15,11 @@ use Datlechin\FilamentMenuBuilder\Models\Menu;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\Component as FormComponent;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Get;
-use Filament\Support\Enums\ActionSize;
-use Filament\Support\Enums\MaxWidth;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -57,7 +56,7 @@ class MenuItems extends Component implements HasActions, HasForms
             ->iconButton()
             ->extraAttributes(['data-sortable-handle' => true, 'class' => 'cursor-move'])
             ->livewireClickHandlerEnabled(false)
-            ->size(ActionSize::Small);
+            ->size(Size::Small);
     }
 
     public function indent(int $itemId): void
@@ -138,7 +137,7 @@ class MenuItems extends Component implements HasActions, HasForms
             ->icon('heroicon-o-arrow-right')
             ->color('gray')
             ->iconButton()
-            ->size(ActionSize::Small)
+            ->size(Size::Small)
             ->action(fn (array $arguments) => $this->indent($arguments['id']))
             ->visible(
                 fn (array $arguments): bool => FilamentMenuBuilderPlugin::get()->isIndentActionsEnabled() &&
@@ -153,7 +152,7 @@ class MenuItems extends Component implements HasActions, HasForms
             ->icon('heroicon-o-arrow-left')
             ->color('gray')
             ->iconButton()
-            ->size(ActionSize::Small)
+            ->size(Size::Small)
             ->action(fn (array $arguments) => $this->unindent($arguments['id']))
             ->visible(
                 fn (array $arguments): bool => FilamentMenuBuilderPlugin::get()->isIndentActionsEnabled() &&
@@ -191,13 +190,13 @@ class MenuItems extends Component implements HasActions, HasForms
         return Action::make('edit')
             ->label(__('filament-actions::edit.single.label'))
             ->iconButton()
-            ->size(ActionSize::Small)
+            ->size(Size::Small)
             ->modalHeading(fn (array $arguments): string => __('filament-actions::edit.single.modal.heading', ['label' => $arguments['title']]))
             ->icon('heroicon-m-pencil-square')
             ->fillForm(fn (array $arguments): array => $this->getMenuItemService()->findByIdWithRelations($arguments['id'])->toArray())
-            ->form($this->getEditFormSchema())
+            ->schema($this->getEditFormSchema())
             ->action(fn (array $data, array $arguments) => $this->getMenuItemService()->update($arguments['id'], $data))
-            ->modalWidth(MaxWidth::Medium)
+            ->modalWidth(Width::Medium)
             ->slideOver();
     }
 
@@ -209,7 +208,7 @@ class MenuItems extends Component implements HasActions, HasForms
             ->groupedIcon(FilamentIcon::resolve('actions::delete-action.grouped') ?? 'heroicon-m-trash')
             ->icon('heroicon-s-trash')
             ->iconButton()
-            ->size(ActionSize::Small)
+            ->size(Size::Small)
             ->requiresConfirmation()
             ->modalHeading(fn (array $arguments): string => __('filament-actions::delete.single.modal.heading', ['label' => $arguments['title']]))
             ->modalSubmitActionLabel(__('filament-actions::delete.single.modal.actions.delete.label'))
@@ -247,7 +246,7 @@ class MenuItems extends Component implements HasActions, HasForms
                 ->options(LinkTarget::class)
                 ->default(LinkTarget::Self),
             Group::make()
-                ->visible(fn (FormComponent $component) => $component->evaluate(FilamentMenuBuilderPlugin::get()->getMenuItemFields()) !== [])
+                ->visible(fn (\Filament\Schemas\Components\Component $component) => $component->evaluate(FilamentMenuBuilderPlugin::get()->getMenuItemFields()) !== [])
                 ->schema(FilamentMenuBuilderPlugin::get()->getMenuItemFields()),
         ];
     }
